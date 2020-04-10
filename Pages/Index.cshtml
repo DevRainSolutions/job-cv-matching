@@ -1,0 +1,198 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+
+    <form method="post">
+        <table style="width:100%">
+            <tr>
+                <th>CV</th>
+                <th>Job description</th>
+            </tr>
+            <tr>
+                <td> 
+                    <textarea rows="10" class="row form-control" draggable="false" type="text" style="width:90%" asp-for="@Model.CV">@Model.CV</textarea>
+                </td>
+                <td>
+                    <textarea rows="10" class="row form-control" draggable="false" type="text" style="width:90%" asp-for="@Model.JobDescription">@Model.JobDescription</textarea>
+                </td>
+            </tr>
+        </table>
+        <input type="submit" value="Analyse" class="btn btn-primary mt-3" />
+    </form>
+
+    @if(Model.GraphResult != null)
+    {
+    <h3 style="margin-top:2em">
+        Score: @Model.Score%
+    </h3>
+
+    <div style="border: 1px solid gray; width:1100px;height:600px; margin:0 auto;">
+        <svg width="1100" height="600"></svg>
+    </div>
+    }
+</div>
+
+
+<!--Plugin CSS file with desired skin-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css" />
+<!--jQuery-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!--Plugin JavaScript file-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+
+
+<style>
+    .showcase__mark {
+        display: block;
+        position: absolute;
+        top: 45px;
+        background: #f00;
+        transform: rotate(-45deg);
+        padding: 1px 3px;
+        border-radius: 3px;
+        color: #fff;
+        margin-left: -10px;
+    }
+</style>
+
+<style>
+    #chart-container {
+        height: 100px;
+    }
+
+    input[type=range] {
+        position: absolute;
+        top: 25;
+        -webkit-appearance: slider-vertical;
+        writing-mode: bt-lr;
+        width: 15px;
+        height: 200px;
+        padding: 0 5px;
+    }
+
+
+    .range_label {
+        position: absolute;
+        top: 230;
+        font: 13px black;
+    }
+
+
+    #totalPercentage {
+        position: absolute;
+        left: 72%;
+        top: 68%;
+        font: 100px red;
+    }
+</style>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+
+<script>
+
+var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+
+var simulation = d3.forceSimulation()
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+     .force('charge', d3.forceManyBody()
+      .strength(-600)
+      .theta(0.8)
+      .distanceMax(150)
+    )
+    .force("center", d3.forceCenter(width / 2 , height / 2));
+
+    var object = '@Html.Raw(Model.GraphResult)';
+
+    var graph = JSON.parse(object);
+
+
+function run(graph) {
+
+  graph.links.forEach(function(d){
+  });
+
+      var link = svg.append("g")
+                    .style("stroke", "#aaa")
+                    .selectAll("line")
+                    .data(graph.links)
+                    .enter().append("line");
+
+      var node = svg.append("g")
+                .attr("class", "nodes", "size","color", "value")
+      .selectAll("circle")
+                .data(graph.nodes)
+      .enter().append("circle")
+              .attr("r", 2)
+              .call(d3.drag()
+                  .on("start", dragstarted)
+                  .on("drag", dragged)
+                  .on("end", dragended));
+
+      var label = svg.append("g")
+          .attr("class", "labels")
+          .selectAll("text")
+          .data(graph.nodes)
+          .enter().append("text")
+            .attr("class", "label")
+            .text(function(d) { return d.id; });
+
+      simulation
+          .nodes(graph.nodes)
+          .on("tick", ticked);
+
+      simulation.force("link")
+          .links(graph.links);
+
+      function ticked() {
+        link
+            .attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+        node
+             .attr("r", function(d) { return d.size}) // radius 16
+             .style("fill",function(d) { return d.color} ) //"#efefef"
+             .style("stroke", "#424242")
+             .style("stroke-width", "1px")
+             .attr("cx", function (d) { return d.x+5; })
+             .attr("cy", function(d) { return d.y-3; });
+
+        label
+    		    .attr("x", function(d) { return d.x; })
+                .attr("y", function (d) { return d.y; })
+                .style("font-size", "15px").style("fill", "#333");
+
+      }
+}
+
+function dragstarted(d) {
+      if (!d3.event.active) simulation.alphaTarget(0.1).restart()
+      d.fx = d.x
+      d.fy = d.y
+    //  simulation.fix(d);
+    }
+
+    function dragged(d) {
+      d.fx = d3.event.x
+      d.fy = d3.event.y
+    //  simulation.fix(d, d3.event.x, d3.event.y);
+    }
+
+    function dragended(d) {
+      d.fx = d3.event.x
+      d.fy = d3.event.y
+      if (!d3.event.active) simulation.alphaTarget(0);
+      //simulation.unfix(d);
+    }
+run(graph)
+
+</script>
