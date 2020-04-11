@@ -4,37 +4,44 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
+    <div class="text-center">
 
-    <form method="post">
-        <table style="width:100%">
-            <tr>
-                <th>CV</th>
-                <th>Job description</th>
-            </tr>
-            <tr>
-                <td> 
-                    <textarea rows="10" class="row form-control" draggable="false" type="text" style="width:90%" asp-for="@Model.CV">@Model.CV</textarea>
-                </td>
-                <td>
-                    <textarea rows="10" class="row form-control" draggable="false" type="text" style="width:90%" asp-for="@Model.JobDescription">@Model.JobDescription</textarea>
-                </td>
-            </tr>
-        </table>
-        <input type="submit" value="Analyse" class="btn btn-primary mt-3" />
-    </form>
+        <form method="post">
+            <div class="row">
+                <div class="col">CV</div>
+                <div class="col">Job description</div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <textarea rows="10" cols="50" class="row form-control mx-0" draggable="false" type="text" style="width:100%" asp-for="@Model.CV">@Model.CV</textarea>
+                </div>
+                <div class="col">
+                    <textarea rows="10" cols="50" class="row form-control mx-0" draggable="false" type="text" style="width:100%" asp-for="@Model.JobDescription">@Model.JobDescription</textarea>
+                </div>
+            </div>
+            <input type="submit" value="Analyse" class="btn btn-primary mt-3 w-25" style="height:50px" />
+        </form>
 
-    @if(Model.GraphResult != null)
-    {
-    <h3 style="margin-top:2em">
-        Score: @Model.Score%
-    </h3>
+        @if (Model.GraphResult != null)
+        {
+            <h3 style="margin-top:2em">
+                Score: @Model.Score%
+            </h3>
 
-    <div style="border: 1px solid gray; width:1100px;height:600px; margin:0 auto;">
-        <svg width="1100" height="600"></svg>
+            <div style="border: 1px solid gray; width:1100px;height:600px; margin:0 auto;">
+                <svg width="1100" height="600"></svg>
+            </div>
+
+            @if (Model.ChartResult != null)
+            {
+                <div style="width:455px; height:400px; margin:0 auto" class="mt-3">
+                    <svg width="100%" height="100%"></svg>
+                    <div style="position: absolute; left:53%; top: 0; border-left:0px black solid; height:100%;"></div>
+                    <form style="display:none"></form>
+                </div>
+            }
+        }
     </div>
-    }
-</div>
 
 
 <!--Plugin CSS file with desired skin-->
@@ -43,6 +50,68 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <!--Plugin JavaScript file-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+
+
+<script>
+    var svgns = "http://www.w3.org/2000/svg";
+
+    var svg = document.getElementsByTagName("svg")[1];
+    var object = '@Html.Raw(Model.ChartResult)';
+
+    var data = JSON.parse(object);
+
+
+    var elementHeight = 40;
+    var elementWidth = Math.floor(0.40 * window.innerWidth / 2);
+
+    var minimalElWidth = 1000;
+
+    var i = 0;
+    data.jobScores.forEach(element => {
+        var carcassBar = document.createElementNS(svgns, "rect");
+        carcassBar.setAttributeNS(null, "width", elementWidth);
+        carcassBar.setAttributeNS(null, "height", elementHeight);
+        carcassBar.setAttributeNS(null, "stroke-width", "3px");
+        carcassBar.setAttributeNS(null, "stroke-color", "black");
+        carcassBar.setAttributeNS(null, "x", 10);
+        carcassBar.setAttributeNS(null, "y", i * (elementHeight + 10));
+        svg.appendChild(carcassBar);
+
+        var coloredBar = document.createElementNS(svgns, "rect");
+        coloredBar.setAttributeNS(null, "width", element.value * elementWidth);
+        coloredBar.setAttributeNS(null, "height", elementHeight);
+        coloredBar.setAttributeNS(null, "fill", "green");
+        coloredBar.setAttributeNS(null, "x", 10);
+        coloredBar.setAttributeNS(null, "y", i * (elementHeight + 10));
+        svg.appendChild(coloredBar);
+
+        if (element.value != 0)
+            minimalElWidth = Math.min(minimalElWidth, element.value * elementWidth);
+
+        ++i;
+    });
+
+    i = 0;
+    data.jobScores.forEach(element => {
+        var label = document.createElementNS(svgns, "text");
+        label.setAttributeNS(null, "fill", "white");
+        label.setAttributeNS(null, "x", minimalElWidth / 2);
+        label.setAttributeNS(null, "y", i * (elementHeight + 10) + elementHeight / 2);
+        label.setAttributeNS(null, "font-size", "20px");
+        label.innerHTML = element.word;
+        svg.appendChild(label);
+
+        var percentage = document.createElementNS(svgns, "text");
+        percentage.setAttributeNS(null, "fill", "red");
+        percentage.setAttributeNS(null, "x", elementWidth + 35);
+        percentage.setAttributeNS(null, "y", i * (elementHeight + 10) + elementHeight / 2 + 10);
+        percentage.setAttributeNS(null, "font-size", "30px");
+        percentage.innerHTML = Math.round(element.value * 100) + "%";
+        svg.appendChild(percentage);
+
+        ++i;
+    });
+</script>
 
 
 <style>
@@ -103,8 +172,8 @@ var svg = d3.select("svg"),
 var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function(d) { return d.id; }))
      .force('charge', d3.forceManyBody()
-      .strength(-600)
-      .theta(0.8)
+      .strength(-500)
+      .theta(0.6)
       .distanceMax(150)
     )
     .force("center", d3.forceCenter(width / 2 , height / 2));

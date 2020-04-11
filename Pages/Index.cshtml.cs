@@ -24,9 +24,10 @@ namespace Demo.Pages
 
         [BindProperty]
         public string JobDescription { get; set; }
-        public object JsonConvert { get; private set; }
 
+        //AI results
         public double Score { get; set; }
+        public string ChartResult { get; set; }
         public string GraphResult { get; set; }
 
         public IndexModel(ILogger<IndexModel> logger)
@@ -41,8 +42,8 @@ namespace Demo.Pages
                 var sample = Templates.FirstOrDefault(x => x.Id == int.Parse(TempId));
                 if (sample == null) sample = Templates.FirstOrDefault();
 
-                CV = sample.CV;
-                JobDescription = sample.JobDescription;
+                CV = sample.CV.Replace("\r\n","").Replace("  ", "");
+                JobDescription = sample.JobDescription.Replace("\r\n", "").Replace("  ", ""); ;
 
                 await Analyze();
             }
@@ -71,8 +72,8 @@ namespace Demo.Pages
 
             if (chartResult.IsSuccessStatusCode)
             {
-                var res = await chartResult.Content.ReadAsStringAsync();
-                var score = JsonSerializer.Deserialize<ChartModel>(res).metrics.weighted_jaccard;
+                ChartResult = await chartResult.Content.ReadAsStringAsync();
+                var score = JsonSerializer.Deserialize<ChartModel>(ChartResult).metrics.weighted_jaccard;
                 Score = Math.Round(score, 0);
             }
 
