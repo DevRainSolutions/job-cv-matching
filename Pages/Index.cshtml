@@ -8,13 +8,13 @@
 
         <form method="post">
             <div class="row">
-                <div class="col">CV</div>
-                <div class="col">Job description</div>
-            </div>
-            <div class="row">
+                <div class="col-2"><h5>CV</h5></div>
                 <div class="col">
                     <textarea rows="10" cols="50" class="row form-control mx-0" draggable="false" type="text" style="width:100%" asp-for="@Model.CV">@Model.CV</textarea>
                 </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-2"><h5>Job Description</h5></div>
                 <div class="col">
                     <textarea rows="10" cols="50" class="row form-control mx-0" draggable="false" type="text" style="width:100%" asp-for="@Model.JobDescription">@Model.JobDescription</textarea>
                 </div>
@@ -95,7 +95,7 @@
     data.jobScores.forEach(element => {
         var label = document.createElementNS(svgns, "text");
         label.setAttributeNS(null, "fill", "white");
-        label.setAttributeNS(null, "x", minimalElWidth / 2);
+        label.setAttributeNS(null, "x", (minimalElWidth / 3));
         label.setAttributeNS(null, "y", i * (elementHeight + 10) + elementHeight / 2);
         label.setAttributeNS(null, "font-size", "20px");
         label.innerHTML = element.word;
@@ -172,8 +172,8 @@ var svg = d3.select("svg"),
 var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function(d) { return d.id; }))
      .force('charge', d3.forceManyBody()
-      .strength(-500)
-      .theta(0.6)
+      .strength(-400)
+      .theta(1)
       .distanceMax(150)
     )
     .force("center", d3.forceCenter(width / 2 , height / 2));

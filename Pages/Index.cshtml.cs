@@ -42,8 +42,8 @@ namespace Demo.Pages
                 var sample = Templates.FirstOrDefault(x => x.Id == int.Parse(TempId));
                 if (sample == null) sample = Templates.FirstOrDefault();
 
-                CV = sample.CV.Replace("\r\n","").Replace("  ", "");
-                JobDescription = sample.JobDescription.Replace("\r\n", "").Replace("  ", ""); ;
+                CV = TemplateResume.Replace("                                    ","").Replace("	","");
+                JobDescription = sample.JobDescription.Replace("                                    ", "").Replace("	", ""); ;
 
                 await Analyze();
             }
@@ -90,75 +90,101 @@ namespace Demo.Pages
             public string JobDescription { get; set; }
         }
 
+
+        private string TemplateResume = @"Oleksandr Krakovetskyi
+                                    Software Engineer and Architect, AI/Data Science Expert, Ph.D.
+                                    Key awards, projects and experience:
+                                    -	2019. Microsoft Certified: Azure Data Scientist Associate
+                                    -	2019. Co-author of “Exam DP-100: Designing and Implementing a Data Science Solution on Azure” certification exam for Microsoft
+                                    -	2019. Co-author of “Web Development Foundations” certification exam for WGU
+                                    -	AI Lead in Inphiz (Sweden, from 2018)
+                                    -	CEO, co-founder of DevRain (from 2012)
+                                    -	CTO, co-founder of DonorUA, a “GPS” service for blood donors (from 2015)
+                                    -	CEO, co-founder of Chatty.ai, an automated platform for the employees interviewing, onboarding, learning and testing (own project, from 2019)
+                                    -	Compliance check software for Sweden law firm, from 2018
+                                    -	2018. “AI fundamentals” training for Microsoft partners (Minsk, Belarus)
+                                    -	2018. Chatbot platform development for Social27 (Seattle, USA)
+                                    -	2018. Software for creating e-books (own project)
+                                    -	2018. Adviser in RevDebug (Poland)
+                                    -	Awarded as “Microsoft Most Valuable Professional” in Artificial Intelligence (from 2011)
+                                    -	Awarded as “Microsoft Regional Director” (from 2010)
+                                    -	Awarded as “Telerik Developer Expert” (2013-2015)
+                                    -	Awarded as “The Best Professional in Software Architecture” (Ukrainian IT Awards, 2013)
+                                    -	2011. Ph.D. in Computer Science (Ukraine)
+                                    -	Expert in Open Data in State Agency for E-Governance of Ukraine (2015-2018)
+                                    -	Community lead in Kyiv Smart City initiative (2015-2016)
+                                    -	Jury member in multiple startup initiatives
+                                    -	EGAP Challenge national coordinator, a competition for e-democracy and open data projects, 2016-2017
+                                    -	Speaker and writer, author of 1 book and 20 science papers
+
+                                    Technologies and professional skills:
+                                    -	AI: Data Mining, Data Extracting, Natural Language Processing, Named Entity Recognition, Math, Machine Learning, Numerical Methods, Math Modelling, Azure Machine Learning
+                                    -	Chatbots: Microsoft Bot Framework, Azure Cognitive Services, Chatfuel, WIT.AI, LUIS
+                                    -	.NET: WPF, WinForms, Mono
+                                    -	Enterprise and cloud technologies: Microsoft Azure, Office 365
+                                    -	Web: ASP.NET MVC, Entity Framework, Web API, REST, JavaScript
+                                    -	Mobile: Windows Phone, Windows Unified Platform, iOS, Android, Xamarin
+                                    -	Domains: Open Data, Smart City, eHealth, Semantic Web
+                                    -	Project management: Agile/Scrum, Jira, Asana, Redmine, TFS, Visual Studio Online, Redmine, UML, Mercurial
+                                    -	DB: NoSQL, MySQL, Microsoft SQL Server, SQL Azure, SQLite
+                                    -	Tools: XCode, Microsoft Visual Studio, NUnit, JetBrains ReSharper, Telerik tools, Red Gate tools, NDepend, StyleCop, FxCop, SharpDevelop";
+
         private List<Template> Templates = new List<Template>()
         {
             new Template()
             {
                 Id = 1,
 
-                CV = @"Lightning-fast, exacting .NET developer with 2+ years of experience. Skilled in ASP.NET MVC, and client-side web development.
-                        Seeking position at Citrix. As intern at BrainWild Global, worked on 10+ projects for SQL database design
-                        Developed and maintained over 20 .NET websites with 100% client satisfaction.",
-
-                JobDescription = @"DevRain is a Ukrainian full-cycle software development company with specialization in mobile, 
-                                    web, cloud and AI/ML development (Xamarin, React Native, Flutter, ASP.NET Core, Azure, iOS, Android, AI/ML, UX/UI).
-                                    Working with startups and enterprises in different domains including ERP/CRM/CMS systems, entertainment/communication/media, 
-                                    finance/banking, digital signage, e-Health and Smart City/eGov. Providing a full stack development from the idea to publishing, 
-                                    as well as research & development, startups consulting, data analysis and other services. Company is experienced in designing and 
-                                    developing intuitive desktop, mobile, tablet, wearable, TV solutions on Microsoft and iOS/Android platforms."
+                JobDescription = @"We are hungry to hire mature Data Scientists to optimize existing trading signals and identify new alpha signals. The following attributes are in demand;
+                                    - A minimum of 3 years exposure with ML, Natural Language Processing, Named Entity Recognition, AI, Deep Learning and Reinforcement algorithms and their corresponding feature engineering efforts.
+                                    - Passion for performing data mining methods on alternative data sets to optimize, amplify and retain revenues with actionable insights.
+                                    - Superior Python/.NET coding skills
+                                    - STEM PhD with post-doc experience focusing on building data engineering tools, customizing machine learning algorithms and a collaborative mindset."
             },
 
             new Template()
             {
                 Id = 2,
 
-                CV = @"I am currently working as a Front End Developer on a small React team building Insurance applications and I am across multiple applications 
-                        that have been developed using our new technology stack. IAG are keen to utilise the latest technologies and we have had great success using React/Redux
-                        running on a Node Express server and using an API backend architecture (via APIGEE) to access the various IAG systems. I have also been a key part of a team
-                        developing an in-house Design System called Chroma, this is a platform and framework agnostic component library. We have then built a React component library 
-                        on top of this system which is used for all IAG Customer Labs applications. As part of this team I have also been responsible for setting up a CI/CD pipeline
-                        using Github/CircleCI/Heroku/NPM & AWS.",
+                JobDescription = @"Responsibilities:
+                                    - Participate in requirements gathering, technical specification, and the design and development of complex software projects
+                                    - Work with product managers, content producers, QA engineers and release engineers to own your solution from development to production
+                                    - Contribute to software architecture design, development of software applications, and integration into enterprise systems
+                                    - Design software architecture based on business requirements, strategy and priorities
 
-
-                JobDescription = @"We are currently searching for a Senior Front-end (React.js) Engineer, passionate about vision and idea of our product and able to work with user-facing 
-                                    part of our application. We take inspiration from Spotify for building our engineering culture and implementing best practices. We work in small product teams. 
-                                    You will join our Supply Team, responsible for attracting the best tutors and helping them advertise themselves on our platform. Our front-end
-                                    developers work on all parts of our system from improving the UX, to making our API more robust. We like to build user-facing features, Typescript, TDD,
-                                    A/B testing, speed optimization and SEO tricks that help us build a bigger business. We have diverse technical challenges that will allow you to develop your
-                                    skills across the stack."
+                                    Requirements:
+                                    - BS/MS in Computer Science or equivalent experience and evidence of exceptional ability
+                                    - 2+ years of working experience
+                                    - Experience in .NET Framework and .NET Core
+                                    - Database experience (MySQL, NoSSQL, MsSQL Server) and good knowledge in query optimization
+                                    - Experience with distributed architectures and REST APIs
+                                    - Good unit testing and integration testing practices
+                                    - Excellent interpersonal communication skills"
             },
 
             new Template()
             {
                 Id = 3,
 
-
-                CV = @"Around 6 years of experience as a Web/Application Developer and coding with analytical programming using
-                        Python, Django. To serve the organization with the best of my technical skills and abilities by utilizing my
-                        educational and professional knowledge and competencies acquired by me in my academic career and
-                        professional experience.
-                        CORE QUALIFICATION
-                        • Experienced with full software development life-cycle, architecting scalable platforms, object oriented
-                        programming, database design and agile methodologies
-                        • Built Web application using Python, Django, Flask, JavaScript, AJAX, HTML and template languages.
-                        • Used Apache to deploy production site.
-                        • Strong experience using Web Services and API’s in python.
-                        • Experience in using Design Patterns such as MVC and frameworks such as Django, Flask.
-                        • Proficient in SQL databases MySQL, PostgreSQL, Oracle and MongoDB.",
-
-
-                JobDescription = @"ougov is searching for a Remote Python Developer to collaborate building a modern and large-scale cloud-based analytics platform built for the web, entirely in Python.
-                                    What will I be doing?
-
-                                    Working on the data transformation and transmitting the data, making assurances about the integrity of it
-                                    Our data flows handle more than 30 million data points every week, you will be central on the delivery of that data to our analytics team
-                                    Work primarily on backend, middleware and databases but everyone in the team regularly works on the full stack.
-
-                                    4+ years’ experience of Python web-based development
-                                    Experience using CherryPy, Flask or similar framework
-                                    Basic understanding of MongoDB, Django & PostgreSQL
-                                    Understanding of TDD methodology
-                                    An interest in ETL"
+                JobDescription = @"- Bachelor’s degree in Computer Science, Computer Engineering, Technology, Information Systems (CIS/MIS), Engineering or related technical discipline, or equivalent experience/training
+                                    - 5 years of full Software Development Life Cycle (SDLC) experience
+                                    - 3+ years of Designed and developed front-end application
+                                    - Proficiency and demonstrated experience in the following technologies:
+                                    - 5 years’ experience in J2EE technologies: Java, JSP, JMS, JAXB, JDBC
+                                    - Database and persistence frameworks: Hibernate, Oracle, Object/Relational Mapping, Query performance tuning
+                                    - Web Servers: Tomcat, tcServer, Websphere
+                                    - Web Services: REST/SOAP (JSON/WSDL/XML)
+                                    - Web: Angular, AngularJS, Ext JS, HTML/5, CSS, jQuery, AJAX, JavaScript, MVC framework
+                                    - Proficient in Spring MVC, Spring-taglib, Spring Web Flow and/or Spring Mobile
+                                    - Proficient in Responsive web design understanding (css media queries)
+                                    - Build/deployment tools: Maven, Git, , Junit, Mockito
+                                    - Proficiency in object-oriented design techniques and principles
+                                    - Proficiency in Microsoft Office Tools (Project, Excel, Word, PowerPoint, etc.)
+                                    - Proficient in CSS3, SASS/SCSS/LESS/COMPASS implementation and best practices
+                                    - Experience in Agile methodologies, such as SCRUM
+                                    - Ability to explain technical concepts and adjust messaging based on the audience, including non-technical groups
+                                    - Ability to influence through outstanding interpersonal skills, collaboration, and negotiation skills
+                                    - Ability to work well within a team environment, as well as independently"
             }
         };
     }
